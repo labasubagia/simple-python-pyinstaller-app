@@ -10,7 +10,7 @@ node {
             junit 'test-reports/results.xml'
         }
     }
-    docker.image('cdrx/pyinstaller-linux:python3').inside {
+    docker.image('brimstone/pyinstaller').inside {
         stage('Deliver') {
             sh 'pyinstaller --onefile sources/add2vals.py'
             archiveArtifacts 'dist/add2vals'
