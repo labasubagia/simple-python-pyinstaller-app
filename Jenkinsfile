@@ -1,18 +1,18 @@
 node {
-    withDockerContainer(image: 'python:2-alpine') {
+    docker.image(image: 'python:2-alpine').inside {
         stage('Build') {
             checkout scm
             sh 'python -m py_compile sources/add2vals.py sources/calc.py'
         }
     }
-    withDockerContainer(image: 'qnib/pytest') {
+    docker.image('qnib/pytest').inside {
         stage('Test') {
             checkout scm
             sh 'py.test --verbose --junit-xml test-reports/results.xml sources/test_calc.py'
             junit 'test-reports/results.xml'
         }
     }
-    withDockerContainer(image: 'cdrx/pyinstaller-linux:python2') {
+    docker.image('cdrx/pyinstaller-linux:python2').inside {
         stage('Deliver') {
             checkout scm
             sh 'pyinstaller --onefile sources/add2vals.py'
