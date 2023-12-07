@@ -2,6 +2,7 @@ node {
     withDockerContainer(image: 'python:2-alpine') {
         stage('Build') {
             sh 'pwd'
+            sh 'ls -l'
             sh 'python -m py_compile sources/add2vals.py sources/calc.py'
         }
     }
