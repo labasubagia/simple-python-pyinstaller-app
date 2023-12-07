@@ -1,7 +1,7 @@
 node {
     withDockerContainer(image: 'python:2-alpine').inside {
         stage('Build') {
-                sh 'python -m py_compile sources/add2vals.py sources/calc.py'
+            sh 'python -m py_compile sources/add2vals.py sources/calc.py'
         }
     }
     withDockerContainer(image: 'qnib/pytest').inside {
@@ -10,7 +10,7 @@ node {
             junit 'test-reports/results.xml'
         }
     }
-    withDockerContainer('cdrx/pyinstaller-linux:python2').inside {
+    withDockerContainer(image: 'cdrx/pyinstaller-linux:python2').inside {
         stage('Deliver') {
             sh 'pyinstaller --onefile sources/add2vals.py'
             archiveArtifacts 'dist/add2vals'
