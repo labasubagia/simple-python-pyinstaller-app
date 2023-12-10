@@ -25,6 +25,7 @@ node {
             approve = "No"
             echo "Approval ignored"
         }
+        echo approve
     }
     
     if (approve == 'Yes') {
