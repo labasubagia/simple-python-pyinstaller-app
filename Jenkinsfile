@@ -25,6 +25,7 @@ node {
         } catch (Throwable e) {
             echo "Approval ignored"
         }
+        echo env.SKIP_PROD
     }
     
     if (env.SKIP_PROD) {
