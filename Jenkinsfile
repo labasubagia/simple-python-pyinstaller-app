@@ -1,3 +1,5 @@
+import org.jenkinsci.plugins.pipeline.modeldefinition.Utils
+
 node {
     def SKIP_PROD = true;
 
@@ -24,6 +26,7 @@ node {
             env.SKIP_PROD = 'false'
         } catch (Throwable e) {
             echo "Approval ignored"
+            Utils.markStageSkippedForConditional('Deploy')
         }
     }
     
