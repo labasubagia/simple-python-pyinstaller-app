@@ -18,7 +18,7 @@ node {
     env.SKIP_PROD = 'true'
     stage("Manual Approval") {
         try {
-            timeout(time: 20, unit: 'SECONDS') {
+            timeout(time: 1, unit: 'MINUTES') {
                 approve = input(message: 'Lanjutkan ke tahap Deploy?', ok: 'Yes')
             }
             env.SKIP_PROD = 'false'
