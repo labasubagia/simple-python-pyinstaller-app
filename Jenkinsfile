@@ -17,11 +17,13 @@ node {
 
     def approve
     stage("Approval") {
-        approve = input(message: 'Lanjutkan ke tahap Deploy?', timeout: 1)
+        timeout(time: 1, unit: 'MINUTES') {
+            approve = input(message: 'Lanjutkan ke tahap Deploy?', ok: 'Yes')
+        }
     }
     
     stage('Deploy') {
-        if (approve == 'proceed') {
+        if (approve == 'Yes') {
             checkout scm
             sh 'docker run --rm -v $(pwd)/sources:/src cdrx/pyinstaller-linux:python2 \'pyinstaller -F add2vals.py\''
             archiveArtifacts 'sources/dist/add2vals'
