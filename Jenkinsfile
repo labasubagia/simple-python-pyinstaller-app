@@ -26,14 +26,15 @@ node {
             env.SKIP_PROD = 'false'
         } catch (Throwable e) {
             echo "Approval ignored"
-            Utils.markStageSkippedForConditional('Deploy')
+            Utils.markStageSkippedForConditional('Manual Approval')
         }
     }
     
-    if (env.SKIP_PROD == 'true') {
-        echo "Skip deploy"
-    } else {
-        stage('Deploy') {
+    stage('Deploy') {
+        if (env.SKIP_PROD == 'true') {
+            echo "Skip deploy"
+            Utils.markStageSkippedForConditional('Deploy')
+        } else {
             checkout scm
             sh 'docker run --rm -v $(pwd)/sources:/src cdrx/pyinstaller-linux:python2 \'pyinstaller -F add2vals.py\''
             archiveArtifacts 'sources/dist/add2vals'
