@@ -15,28 +15,26 @@ node {
         }
     }
 
-    def approve
+    env.SKIP_PROD = true
     stage("Approval") {
         try {
             timeout(time: 20, unit: 'SECONDS') {
                 approve = input(message: 'Lanjutkan ke tahap Deploy?', ok: 'Yes')
-                echo approve
             }
+            env.SKIP_PROD = false
         } catch (Throwable e) {
-            approve = "No"
             echo "Approval ignored"
         }
-        echo approve
     }
     
-    if (approve == 'Yes') {
+    if (env.SKIP_PROD) {
+        echo "Skip deploy"
+    } else {
         stage('Deploy') {
             checkout scm
             sh 'docker run --rm -v $(pwd)/sources:/src cdrx/pyinstaller-linux:python2 \'pyinstaller -F add2vals.py\''
             archiveArtifacts 'sources/dist/add2vals'
         }
-    } else {
-        echo "Skip deploy"
     }
 
 }
