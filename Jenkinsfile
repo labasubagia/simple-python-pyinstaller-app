@@ -17,8 +17,13 @@ node {
 
     def approve
     stage("Approval") {
-        timeout(time: 1, unit: 'MINUTES') {
-            approve = input(message: 'Lanjutkan ke tahap Deploy?', ok: 'Yes')
+        try {
+            timeout(time: 20, unit: 'SECONDS') {
+                approve = input(message: 'Lanjutkan ke tahap Deploy?', ok: 'Yes')
+            }
+        } catch (Throwable e) {
+            approve = "No"
+            echo "Approval ignored"
         }
     }
     
