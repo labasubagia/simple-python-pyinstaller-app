@@ -27,14 +27,14 @@ node {
         }
     }
     
-    stage('Deploy') {
-        if (approve == 'Yes') {
+    if (approve == 'Yes') {
+        stage('Deploy') {
             checkout scm
             sh 'docker run --rm -v $(pwd)/sources:/src cdrx/pyinstaller-linux:python2 \'pyinstaller -F add2vals.py\''
             archiveArtifacts 'sources/dist/add2vals'
-        } else {
-            echo "Skip deploy"
         }
+    } else {
+        echo "Skip deploy"
     }
-    
+
 }
