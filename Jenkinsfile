@@ -16,7 +16,7 @@ node {
     }
 
     env.SKIP_PROD = 'true'
-    stage("Approval") {
+    stage("Manual Approval") {
         try {
             timeout(time: 20, unit: 'SECONDS') {
                 approve = input(message: 'Lanjutkan ke tahap Deploy?', ok: 'Yes')
@@ -25,7 +25,6 @@ node {
         } catch (Throwable e) {
             echo "Approval ignored"
         }
-        echo env.SKIP_PROD
     }
     
     if (env.SKIP_PROD == 'true') {
