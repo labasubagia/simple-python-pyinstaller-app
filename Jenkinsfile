@@ -20,6 +20,7 @@ node {
         try {
             timeout(time: 20, unit: 'SECONDS') {
                 approve = input(message: 'Lanjutkan ke tahap Deploy?', ok: 'Yes')
+                echo approve
             }
         } catch (Throwable e) {
             approve = "No"
