@@ -2,13 +2,12 @@ import org.jenkinsci.plugins.pipeline.modeldefinition.Utils
 
 node {
     checkout scm
-    def appImg = docker.build("myapp:latest", "./")
+    def appImg
 
-    appImg.inside {
-        stage('Build') {
-            sh 'python -m py_compile sources/add2vals.py sources/calc.py'
-        }
+    stage('Build') {
+        appImg = docker.build("myapp:latest", "./")
     }
+
     appImg.inside {
         stage('Test') {
             sh 'py.test --verbose --junit-xml test-reports/results.xml sources/test_calc.py'

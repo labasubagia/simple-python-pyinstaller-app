@@ -12,6 +12,7 @@ COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 
 COPY . .
+RUN python -m py_compile sources/add2vals.py sources/calc.py
 
 EXPOSE 8501
 
