@@ -1,17 +1,16 @@
 import org.jenkinsci.plugins.pipeline.modeldefinition.Utils
 
 node {
-    def SKIP_PROD = true;
+    checkout scm
+    def appImg = docker.build("myapp:latest", "./")
 
-    docker.image('python:2-alpine').inside {
+    appImg.inside {
         stage('Build') {
-            checkout scm
             sh 'python -m py_compile sources/add2vals.py sources/calc.py'
         }
     }
-    docker.image('qnib/pytest').inside {
+    appImg.inside {
         stage('Test') {
-            checkout scm
             sh 'py.test --verbose --junit-xml test-reports/results.xml sources/test_calc.py'
             junit 'test-reports/results.xml'
         }
@@ -35,9 +34,8 @@ node {
             echo "Skip deploy"
             Utils.markStageSkippedForConditional('Deploy')
         } else {
-            checkout scm
-            sh 'docker run --rm -v $(pwd)/sources:/src cdrx/pyinstaller-linux:python2 \'pyinstaller -F add2vals.py\''
-            archiveArtifacts 'sources/dist/add2vals'
+            sh 'docker stop run_myapp &>/dev/null && echo "Removed old container"'
+            sh 'docker run --rm --name run_myapp -d -p 8501:8501 myapp:latest'
         }
     }
 
