@@ -33,8 +33,8 @@ node {
             echo "Skip deploy"
             Utils.markStageSkippedForConditional('Deploy')
         } else {
-            sh 'docker rm -f run_myapp &>/dev/null && echo "Remove old container"'
-            sh 'docker run --rm --name run_myapp -d -p 8501:8501 myapp:latest'
+            sh 'docker compose down -v'
+            sh 'docker compose up -d'
         }
     }
 
