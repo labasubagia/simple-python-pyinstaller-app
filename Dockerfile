@@ -1,4 +1,5 @@
 FROM python:alpine
+RUN apk add --update py3-pip
 
 WORKDIR /app
 
