@@ -19,7 +19,7 @@ node {
     stage("Manual Approval") {
         try {
             timeout(time: 1, unit: 'MINUTES') {
-                approve = input(message: 'Lanjutkan ke tahap Deploy?', ok: 'Yes')
+                input(message: 'Lanjutkan ke tahap Deploy?', ok: 'Yes')
             }
             env.SKIP_PROD = 'false'
         } catch (Throwable e) {
