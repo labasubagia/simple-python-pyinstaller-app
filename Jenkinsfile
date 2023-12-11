@@ -34,7 +34,7 @@ node {
             sh 'docker compose up -d'
             sh 'docker system prune -f &'
 
-            sleep: 1, unit: 'MINUTES'
+            sleep(time:1, unit: "MINUTES")
             
             sh 'docker compose down -v'
         }
