@@ -35,7 +35,7 @@ node {
         } else {
             sh 'docker compose down -v'
             sh 'docker compose up -d'
-            sh 'docker system prune -af'
+            sh 'docker system prune -f'
         }
     }
 
