@@ -18,9 +18,7 @@ node {
     env.SKIP_PROD = 'true'
     stage("Manual Approval") {
         try {
-            timeout(time: 1, unit: 'MINUTES') {
-                input(message: 'Lanjutkan ke tahap Deploy?', ok: 'Yes')
-            }
+            input(message: 'Lanjutkan ke tahap Deploy?', ok: 'Yes')
             env.SKIP_PROD = 'false'
         } catch (Throwable e) {
             echo "Approval ignored"
@@ -33,9 +31,12 @@ node {
             echo "Skip deploy"
             Utils.markStageSkippedForConditional('Deploy')
         } else {
-            sh 'docker compose down -v'
             sh 'docker compose up -d'
-            sh 'docker system prune -f'
+            sh 'docker system prune -f &'
+
+            sleep: 1, unit: 'MINUTES'
+            
+            sh 'docker compose down -v'
         }
     }
 
